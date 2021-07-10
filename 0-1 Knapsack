@@ -1,0 +1,45 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+  int i,j,n,m;
+  cout<<"Enter the number of weights: ";
+  cin>>n;
+  int w[n],v[n];//Weight array and its corresponding profits.
+  cout<<"Enter the total capacity needed: ";
+  cin>>m;
+  cout<<"Enter the weights with its corresponfing profits: ";
+  for(i=1;i<=n;i++)
+    cin>>w[i]>>v[i];
+  int mat[n+1][m+1];//Matrix which will store all the possibilities.
+  for(i=0;i<n+1;i++)
+  {
+    for(j=0;j<m+1;j++)
+    {
+      if(i==0 || j==0)
+      {
+        mat[i][j]=0;
+        continue;
+      }
+      if(w[i]<=j)
+        mat[i][j]=max(mat[i-1][j], v[i]+mat[i-1][j-w[i]]);
+      else
+        mat[i][j]=mat[i-1][j];
+    }
+  }//Storing the values is over
+  i=n,j=m;
+  //Now we will see the weights which will be included in the total capacity and will provide the max profit.
+  while(i!=0 && j!=0)
+  {
+    if(mat[i][j]!=mat[i-1][j])
+    {
+      cout<<endl<<"Weight "<<w[i]<<" is included with profit "<<v[i];
+      j=j-w[i];
+      i=i-1;
+    }
+    else
+      i=i-1;
+  }
+  cout<<endl<<"The total profit is: "<<mat[n][m];
+  return 0;
+}
